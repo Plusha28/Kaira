@@ -14,7 +14,6 @@
     overflow: hidden;
   }
 
-  /* Общий контейнер, накрывающий весь экран */
   .stage {
     position: fixed;
     inset: 0;
@@ -24,7 +23,7 @@
     padding: 20px;
   }
 
-  /* Стартовый экран — растянут на весь экран и центрирует содержимое */
+  /* ===== Стартовый экран ===== */
   .screen {
     text-align: center;
     transition: opacity 0.8s ease, transform 0.8s ease;
@@ -63,7 +62,7 @@
     letter-spacing: 1px;
   }
 
-  button {
+  .btn-main {
     background: linear-gradient(135deg, #e94560, #c23152);
     color: white;
     border: none;
@@ -79,15 +78,15 @@
     z-index: 3;
   }
 
-  button:hover {
+  .btn-main:hover {
     transform: translateY(-3px);
     box-shadow: 0 15px 40px rgba(233, 69, 96, 0.7);
   }
 
-  button:active { transform: scale(0.97); }
+  .btn-main:active { transform: scale(0.97); }
 
-  /* Экран с поздравлением — абсолютный, точно по центру */
-  .greeting-card {
+  /* ===== Меню выбора ===== */
+  .menu-card {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -98,7 +97,7 @@
                 transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
     background: rgba(255, 255, 255, 0.97);
     border-radius: 28px;
-    padding: 50px 35px;
+    padding: 45px 35px;
     max-width: 520px;
     width: calc(100% - 40px);
     text-align: center;
@@ -106,16 +105,16 @@
     z-index: 2;
   }
 
-  .greeting-card.show {
+  .menu-card.show {
     opacity: 1;
     pointer-events: auto;
     transform: translate(-50%, -50%) scale(1);
   }
 
-  .greeting-card .emoji-big {
-    font-size: 70px;
+  .menu-card .emoji-big {
+    font-size: 60px;
     display: block;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     animation: bounce 2s infinite;
   }
 
@@ -124,37 +123,244 @@
     50% { transform: translateY(-10px); }
   }
 
-  .greeting-card h1 {
-    font-size: 30px;
+  .menu-card h2 {
+    font-size: 24px;
     background: linear-gradient(90deg, #e94560, #ff6b9d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 22px;
+    margin-bottom: 25px;
     line-height: 1.3;
   }
 
-  .greeting-card p {
+  .menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .btn-menu {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 16px 24px;
     font-size: 17px;
-    line-height: 1.8;
-    color: #444;
-    margin-bottom: 14px;
+    font-weight: 600;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
-  .greeting-card .signature {
-    margin-top: 25px;
-    font-size: 15px;
+  .btn-menu:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(102, 126, 234, 0.55);
+  }
+
+  .btn-menu:active { transform: scale(0.98); }
+
+  .btn-menu .icon { font-size: 26px; flex-shrink: 0; }
+
+  .btn-menu .sub {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+
+  /* ===== Экран квеста ===== */
+  .quest-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%) scale(0.92);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 28px;
+    padding: 40px 32px;
+    max-width: 520px;
+    width: calc(100% - 40px);
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    z-index: 3;
+  }
+
+  .quest-card.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .quest-step {
+    font-size: 13px;
+    color: #aaa;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+  }
+
+  .quest-emoji {
+    font-size: 56px;
+    display: block;
+    margin-bottom: 15px;
+    animation: bounce 2s infinite;
+  }
+
+  .quest-text {
+    font-size: 19px;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 25px;
+    min-height: 60px;
+    transition: opacity 0.3s;
+  }
+
+  .quest-text.fade { opacity: 0; }
+
+  .btn-quest {
+    background: linear-gradient(135deg, #e94560, #c23152);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 17px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(233, 69, 96, 0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-quest:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(233, 69, 96, 0.65);
+  }
+
+  .btn-quest:active { transform: scale(0.97); }
+
+  .progress-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ddd;
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .dot.active {
+    background: #e94560;
+    transform: scale(1.3);
+  }
+
+  .dot.done { background: #6bcb77; }
+
+  /* ===== Экран случайных поздравлений ===== */
+  .random-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%) scale(0.92);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 28px;
+    padding: 45px 35px;
+    max-width: 520px;
+    width: calc(100% - 40px);
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    z-index: 3;
+  }
+
+  .random-card.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .random-emoji {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .random-text {
+    font-size: 18px;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 25px;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.35s;
+  }
+
+  .random-text.fade { opacity: 0; }
+
+  .random-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-random {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(102, 126, 234, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-random:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(102, 126, 234, 0.6);
+  }
+
+  .btn-random:active { transform: scale(0.97); }
+
+  .btn-back {
+    background: transparent;
     color: #888;
-    font-style: italic;
+    border: 2px solid #ddd;
+    padding: 12px 26px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
   }
 
-  /* Конфетти */
+  .btn-back:hover { border-color: #aaa; color: #555; }
+
+  /* ===== Конфетти ===== */
   .confetti {
     position: fixed;
     width: 10px;
     height: 10px;
     top: -10px;
-    z-index: 1;
+    z-index: 10;
     pointer-events: none;
     animation: fall linear forwards;
   }
@@ -168,36 +374,190 @@
 
   <div class="stage">
 
-    <!-- Экран 1: кнопка -->
+    <!-- Стартовый экран -->
     <div class="screen" id="screenStart">
       <span class="gift-icon">🎁</span>
       <p class="hint">У тебя есть подарок...</p>
-      <button onclick="openGift()">Открыть 🎉</button>
+      <button class="btn-main" onclick="openGift()">Открыть 🎉</button>
     </div>
 
-    <!-- Экран 2: поздравление -->
-    <div class="greeting-card" id="greetingCard">
+    <!-- Меню выбора -->
+    <div class="menu-card" id="menuCard">
       <span class="emoji-big">🎂</span>
-      <h1>С Днём Рождения!</h1>
-      <p>Пусть этот год принесёт тебе море радости, ярких моментов и исполнения самых заветных желаний.</p>
-      <p>Желаю крепкого здоровья, вдохновения и людей рядом, которые тебя ценят.</p>
-      <!-- Подпись — меняй здесь -->
-      <p class="signature">— от всего сердца 💛</p>
+      <h2>С Днём Рождения!</h2>
+      <div class="menu-buttons">
+        <button class="btn-menu" onclick="startQuest()">
+          <span class="icon">🗺️</span>
+          <span>Пройти квест<span class="sub">5 шагов до поздравления</span></span>
+        </button>
+        <button class="btn-menu" onclick="startRandom()">
+          <span class="icon">🎲</span>
+          <span>Случайное поздравление<span class="sub">Жми — и получи тёплые слова</span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Экран квеста -->
+    <div class="quest-card" id="questCard">
+      <div class="quest-step" id="questStep">Шаг 1 из 5</div>
+      <span class="quest-emoji" id="questEmoji">✨</span>
+      <div class="quest-text" id="questText"></div>
+      <button class="btn-quest" id="questBtn" onclick="nextQuestStep()">Дальше →</button>
+      <div class="progress-dots" id="questDots"></div>
+    </div>
+
+    <!-- Экран случайных поздравлений -->
+    <div class="random-card" id="randomCard">
+      <span class="random-emoji" id="randomEmoji">💛</span>
+      <div class="random-text" id="randomText"></div>
+      <div class="random-buttons">
+        <button class="btn-random" onclick="showRandomGreeting()">Ещё одно 🎲</button>
+        <button class="btn-back" onclick="backToMenu()">← Назад</button>
+      </div>
     </div>
 
   </div>
 
 <script>
-  function openGift() {
-    const startScreen = document.getElementById('screenStart');
-    startScreen.classList.add('hidden');
+  /* ===== Данные квеста ===== */
+  const questData = [
+    { emoji: "🔑", text: "Нажми, чтобы получить первый ключ к празднику..." },
+    { emoji: "🌟", text: "Первый ключ — это улыбка. Улыбнись! Теперь второй ключ..." },
+    { emoji: "💫", text: "Второй ключ — это тёплое слово. Скажи кому-нибудь доброе слово..." },
+    { emoji: "🎈", text: "Третий ключ — это мечта. Вспомни свою самую заветную..." },
+    { emoji: "🎂", text: "Готово! Ты собрал(а) все ключи. Вот твоё поздравление: пусть всё, о чём ты мечтаешь, обязательно сбудется! ✨" }
+  ];
 
-    const card = document.getElementById('greetingCard');
-    card.classList.add('show');
+  /* ===== Данные случайных поздравлений ===== */
+  const randomGreetings = [
+    { emoji: "🌟", text: "Пусть каждый день будет наполнен маленькими радостями, которые складываются в большое счастье." },
+    { emoji: "💛", text: "Желаю тебе людей рядом, которые ценят тебя таким(ой), какой(ая) ты есть — без масок и компромиссов." },
+    { emoji: "🚀", text: "Пусть этот год станет годом смелых решений и новых горизонтов. Ты способен(на) на большее, чем думаешь!" },
+    { emoji: "🌿", text: "Здоровья тебе — не просто отсутствия болезней, а настоящей энергии, лёгкости и желания жить." },
+    { emoji: "✨", text: "Пусть мечты сбываются не по расписанию, а внезапно — как приятный сюрприз посреди обычного дня." },
+    { emoji: "🎨", text: "Желаю вдохновения в том, что ты любишь, и смелости пробовать то, что ещё не пробовал(а)." },
+    { emoji: "🌊", text: "Пусть в жизни будет больше спокойных дней и меньше поводов для тревог. Ты этого достоин(на)." },
+    { emoji: "🔥", text: "Пусть твой внутренний огонь не гаснет, а люди вокруг помогают ему разгораться ярче." },
+    { emoji: "🍀", text: "Желаю удачи — той, которая приходит к тем, кто не боится делать шаг вперёд." },
+    { emoji: "🌈", text: "Пусть после каждой трудности в твоей жизни появляется радуга — яркая, широкая и обязательно на всё небо." },
+    { emoji: "💫", text: "Ты — тот человек, с которым хочется делить и радость, и трудности. Пусть и с тобой делят самое лучшее." },
+    { emoji: "🎁", text: "Желаю получать подарки не только на праздники, но и от самой жизни — неожиданные и очень нужные." },
+    { emoji: "🌻", text: "Пусть каждый день будет поводом сказать себе: «я молодец». Потому что ты действительно молодец." },
+    { emoji: "🕊️", text: "Мира тебе внутри и снаружи. Пусть всё, что тревожило, отпускает, а что радовало — остаётся." },
+    { emoji: "🎉", text: "И самое главное — пусть этот день рождения запомнится надолго! С праздником!" }
+  ];
 
-    createConfetti(60);
+  /* ===== Управление экранами ===== */
+  function hideAll() {
+    document.getElementById('screenStart').classList.add('hidden');
+    document.getElementById('menuCard').classList.remove('show');
+    document.getElementById('questCard').classList.remove('show');
+    document.getElementById('randomCard').classList.remove('show');
   }
 
+  function openGift() {
+    document.getElementById('screenStart').classList.add('hidden');
+    document.getElementById('menuCard').classList.add('show');
+    createConfetti(40);
+  }
+
+  function backToMenu() {
+    hideAll();
+    document.getElementById('menuCard').classList.add('show');
+  }
+
+  /* ===== Квест ===== */
+  let questIndex = 0;
+
+  function startQuest() {
+    hideAll();
+    questIndex = 0;
+    document.getElementById('questCard').classList.add('show');
+    buildDots();
+    renderQuestStep();
+  }
+
+  function buildDots() {
+    const dots = document.getElementById('questDots');
+    dots.innerHTML = '';
+    questData.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot';
+      dots.appendChild(d);
+    });
+  }
+
+  function renderQuestStep() {
+    const step = questData[questIndex];
+    document.getElementById('questStep').textContent = `Шаг ${questIndex + 1} из ${questData.length}`;
+    document.getElementById('questEmoji').textContent = step.emoji;
+
+    const textEl = document.getElementById('questText');
+    textEl.classList.add('fade');
+    setTimeout(() => {
+      textEl.textContent = step.text;
+      textEl.classList.remove('fade');
+    }, 200);
+
+    // Кнопка
+    const btn = document.getElementById('questBtn');
+    if (questIndex === questData.length - 1) {
+      btn.textContent = '🎉 Спасибо!';
+      btn.onclick = () => { createConfetti(80); backToMenu(); };
+    } else {
+      btn.textContent = 'Дальше →';
+      btn.onclick = nextQuestStep;
+    }
+
+    // Точки прогресса
+    const dots = document.querySelectorAll('#questDots .dot');
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === questIndex);
+      d.classList.toggle('done', i < questIndex);
+    });
+  }
+
+  function nextQuestStep() {
+    if (questIndex < questData.length - 1) {
+      questIndex++;
+      renderQuestStep();
+    }
+  }
+
+  /* ===== Случайные поздравления ===== */
+  let lastRandomIndex = -1;
+
+  function startRandom() {
+    hideAll();
+    document.getElementById('randomCard').classList.add('show');
+    showRandomGreeting();
+  }
+
+  function showRandomGreeting() {
+    let idx;
+    do {
+      idx = Math.floor(Math.random() * randomGreetings.length);
+    } while (idx === lastRandomIndex && randomGreetings.length > 1);
+    lastRandomIndex = idx;
+
+    const g = randomGreetings[idx];
+    const textEl = document.getElementById('randomText');
+    const emojiEl = document.getElementById('randomEmoji');
+
+    textEl.classList.add('fade');
+    emojiEl.style.opacity = '0';
+
+    setTimeout(() => {
+      emojiEl.textContent = g.emoji;
+      textEl.textContent = g.text;
+      textEl.classList.remove('fade');
+      emojiEl.style.opacity = '1';
+    }, 300);
+
+    createConfetti(15);
+  }
+
+  /* ===== Конфетти ===== */
   function createConfetti(count) {
     const colors = ['#e94560', '#ff6b9d', '#ffd93d', '#6bcb77', '#4d96ff', '#c77dff'];
     for (let i = 0; i < count; i++) {
