@@ -9,26 +9,38 @@
 
   body {
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-family: 'Segoe UI', Tahoma, sans-serif;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     overflow: hidden;
+  }
+
+  /* Общий контейнер, накрывающий весь экран */
+  .stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
   }
 
-  /* Экран с кнопкой */
+  /* Стартовый экран — растянут на весь экран и центрирует содержимое */
   .screen {
     text-align: center;
     transition: opacity 0.8s ease, transform 0.8s ease;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
   }
 
   .screen.hidden {
     opacity: 0;
     transform: scale(0.9);
     pointer-events: none;
-    position: absolute;
   }
 
   .gift-icon {
@@ -44,7 +56,7 @@
   }
 
   .hint {
-    color: rgba(255,255,255,0.7);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 16px;
     margin-bottom: 30px;
     letter-spacing: 1px;
@@ -71,26 +83,28 @@
 
   button:active { transform: scale(0.97); }
 
-  /* Экран с поздравлением */
+  /* Экран с поздравлением — абсолютный, точно по центру */
   .greeting-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%) scale(0.92);
+    opacity: 0;
+    transition: opacity 1s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
     background: rgba(255, 255, 255, 0.97);
     border-radius: 28px;
     padding: 50px 35px;
     max-width: 520px;
-    width: 100%;
+    width: calc(100% - 40px);
     text-align: center;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    transform: translateY(50px) scale(0.92);
-    transition: opacity 1s cubic-bezier(0.34, 1.56, 0.64, 1),
-                transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
     z-index: 2;
   }
 
   .greeting-card.show {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .greeting-card .emoji-big {
@@ -147,33 +161,35 @@
 </head>
 <body>
 
-  <!-- Экран 1: кнопка -->
-  <div class="screen" id="screenStart">
-    <span class="gift-icon">🎁</span>
-    <p class="hint">У тебя есть подарок...</p>
-    <button onclick="openGift()">Открыть 🎉</button>
-  </div>
+  <div class="stage">
 
-  <!-- Экран 2: поздравление (скрыто изначально) -->
-  <div class="greeting-card" id="greetingCard">
-    <span class="emoji-big">🎂</span>
-    <h1>С Днём Рождения!</h1>
-    <p>Пусть этот год принесёт тебе море радости, ярких моментов и исполнения самых заветных желаний.</p>
-    <p>Желаю крепкого здоровья, вдохновения и людей рядом, которые тебя ценят.</p>
-    <p class="signature">— с любовью, твой друг 💌</p>
+    <!-- Экран 1: кнопка -->
+    <div class="screen" id="screenStart">
+      <span class="gift-icon">🎁</span>
+      <p class="hint">У тебя есть подарок...</p>
+      <button onclick="openGift()">Открыть 🎉</button>
+    </div>
+
+    <!-- Экран 2: поздравление -->
+    <div class="greeting-card" id="greetingCard">
+      <span class="emoji-big">🎂</span>
+      <h1>С Днём Рождения!</h1>
+      <p>Пусть этот год принесёт тебе море радости, ярких моментов и исполнения самых заветных желаний.</p>
+      <p>Желаю крепкого здоровья, вдохновения и людей рядом, которые тебя ценят.</p>
+      <!-- Подпись — меняй здесь -->
+      <p class="signature">— от всего сердца 💛</p>
+    </div>
+
   </div>
 
 <script>
   function openGift() {
-    // Скрываем стартовый экран
     const startScreen = document.getElementById('screenStart');
     startScreen.classList.add('hidden');
 
-    // Показываем поздравление
     const card = document.getElementById('greetingCard');
     card.classList.add('show');
 
-    // Запускаем конфетти
     createConfetti(60);
   }
 
