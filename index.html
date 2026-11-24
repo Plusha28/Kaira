@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тебе письмо 🎁</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    overflow: hidden;
+    padding: 20px;
+  }
+
+  /* Экран с кнопкой */
+  .screen {
+    text-align: center;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .screen.hidden {
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+    position: absolute;
+  }
+
+  .gift-icon {
+    font-size: 90px;
+    display: block;
+    margin-bottom: 30px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  .hint {
+    color: rgba(255,255,255,0.7);
+    font-size: 16px;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+  }
+
+  button {
+    background: linear-gradient(135deg, #e94560, #c23152);
+    color: white;
+    border: none;
+    padding: 18px 50px;
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 60px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(233, 69, 96, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 1px;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(233, 69, 96, 0.7);
+  }
+
+  button:active { transform: scale(0.97); }
+
+  /* Экран с поздравлением */
+  .greeting-card {
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 28px;
+    padding: 50px 35px;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(50px) scale(0.92);
+    transition: opacity 1s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    z-index: 2;
+  }
+
+  .greeting-card.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .greeting-card .emoji-big {
+    font-size: 70px;
+    display: block;
+    margin-bottom: 15px;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .greeting-card h1 {
+    font-size: 30px;
+    background: linear-gradient(90deg, #e94560, #ff6b9d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 22px;
+    line-height: 1.3;
+  }
+
+  .greeting-card p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 14px;
+  }
+
+  .greeting-card .signature {
+    margin-top: 25px;
+    font-size: 15px;
+    color: #888;
+    font-style: italic;
+  }
+
+  /* Конфетти */
+  .confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    z-index: 1;
+    pointer-events: none;
+    animation: fall linear forwards;
+  }
+
+  @keyframes fall {
+    to { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Экран 1: кнопка -->
+  <div class="screen" id="screenStart">
+    <span class="gift-icon">🎁</span>
+    <p class="hint">У тебя есть подарок...</p>
+    <button onclick="openGift()">Открыть 🎉</button>
+  </div>
+
+  <!-- Экран 2: поздравление (скрыто изначально) -->
+  <div class="greeting-card" id="greetingCard">
+    <span class="emoji-big">🎂</span>
+    <h1>С Днём Рождения!</h1>
+    <p>Пусть этот год принесёт тебе море радости, ярких моментов и исполнения самых заветных желаний.</p>
+    <p>Желаю крепкого здоровья, вдохновения и людей рядом, которые тебя ценят.</p>
+    <p class="signature">— с любовью, твой друг 💌</p>
+  </div>
+
+<script>
+  function openGift() {
+    // Скрываем стартовый экран
+    const startScreen = document.getElementById('screenStart');
+    startScreen.classList.add('hidden');
+
+    // Показываем поздравление
+    const card = document.getElementById('greetingCard');
+    card.classList.add('show');
+
+    // Запускаем конфетти
+    createConfetti(60);
+  }
+
+  function createConfetti(count) {
+    const colors = ['#e94560', '#ff6b9d', '#ffd93d', '#6bcb77', '#4d96ff', '#c77dff'];
+    for (let i = 0; i < count; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      piece.style.animationDelay = Math.random() * 0.8 + 's';
+      piece.style.width = piece.style.height = (Math.random() * 8 + 6) + 'px';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), 6000);
+    }
+  }
+</script>
+
+</body>
+</html>
