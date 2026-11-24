@@ -354,6 +354,269 @@
 
   .btn-back:hover { border-color: #aaa; color: #555; }
 
+  /* ===== Мини-игра «Свеча на торт» ===== */
+  .game-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%) scale(0.92);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 28px;
+    padding: 30px 25px 35px;
+    max-width: 520px;
+    width: calc(100% - 40px);
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    z-index: 3;
+  }
+
+  .game-card.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .game-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e94560;
+    margin-bottom: 6px;
+  }
+
+  .game-hint {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 18px;
+  }
+
+  /* Игровое поле */
+  .game-field {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    background: linear-gradient(180deg, #fff5f7 0%, #ffe9ef 100%);
+    border-radius: 20px;
+    border: 2px dashed #ffcdd9;
+    margin-bottom: 18px;
+    overflow: hidden;
+    touch-action: none; /* чтобы drag не скроллил страницу */
+  }
+
+  /* Торт */
+  .cake {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  /* Место для свечи на торте */
+  .cake-top {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+
+  /* Слот, куда надо бросить свечу */
+  .candle-slot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px dashed #f7a8b8;
+    background: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  }
+
+  .candle-slot.hover {
+    border-color: #e94560;
+    background: rgba(233, 69, 96, 0.15);
+    transform: translateX(-50%) scale(1.15);
+  }
+
+  .candle-slot.filled {
+    border-color: transparent;
+    background: transparent;
+  }
+
+  /* Ярусы торта */
+  .cake-layer {
+    width: 100%;
+    border-radius: 12px;
+    position: relative;
+  }
+
+  .cake-layer.top {
+    height: 40px;
+    background: linear-gradient(180deg, #ffd1dc, #ffb6c9);
+    border-radius: 14px 14px 0 0;
+    box-shadow: inset 0 -6px 0 rgba(255,255,255,0.4);
+  }
+
+  .cake-layer.middle {
+    height: 35px;
+    background: linear-gradient(180deg, #ffc0cb, #ff9eb5);
+    width: 92%;
+    margin: 0 auto;
+  }
+
+  .cake-layer.bottom {
+    height: 35px;
+    background: linear-gradient(180deg, #ffb3c6, #ff8fab);
+    width: 84%;
+    margin: 0 auto;
+    border-radius: 0 0 14px 14px;
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.08);
+  }
+
+  /* Свеча (перетаскиваемая) */
+  .candle {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 70px;
+    cursor: grab;
+    touch-action: none;
+    z-index: 5;
+    transition: transform 0.15s;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+  }
+
+  .candle:active { cursor: grabbing; }
+
+  .candle.dragging {
+    transform: translateX(-50%) scale(1.1) rotate(3deg);
+    z-index: 20;
+  }
+
+  .candle-body {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 50px;
+    border-radius: 4px;
+    background: repeating-linear-gradient(
+      45deg,
+      #4d96ff,
+      #4d96ff 6px,
+      #fff 6px,
+      #fff 12px
+    );
+    box-shadow: inset -2px 0 2px rgba(0,0,0,0.15);
+  }
+
+  .candle-wick {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 8px;
+    background: #333;
+    border-radius: 1px;
+  }
+
+  /* Пламя */
+  .flame {
+    position: absolute;
+    bottom: 56px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    width: 16px;
+    height: 26px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background: radial-gradient(circle at 50% 70%, #fff8b0 0%, #ffd93d 40%, #ff9a00 70%, #ff6b00 100%);
+    box-shadow: 0 0 18px 6px rgba(255, 200, 50, 0.7);
+    transform-origin: bottom center;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: flicker 0.3s ease-in-out infinite alternate;
+  }
+
+  .flame.on {
+    transform: translateX(-50%) scale(1);
+  }
+
+  @keyframes flicker {
+    0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+    100% { transform: translateX(-50%) scale(1.08) rotate(2deg); }
+  }
+
+  /* Подсказка «перетащи сюда» */
+  .drag-label {
+    position: absolute;
+    left: 50%;
+    bottom: 115px;
+    transform: translateX(-50%);
+    font-size: 13px;
+    color: #e94560;
+    font-weight: 600;
+    white-space: nowrap;
+    animation: hintFloat 1.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes hintFloat {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.9; }
+    50% { transform: translateX(-50%) translateY(-4px); opacity: 0.5; }
+  }
+
+  .drag-label.hide { display: none; }
+
+  /* Кнопки игры */
+  .game-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-game {
+    background: linear-gradient(135deg, #e94560, #c23152);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(233, 69, 96, 0.45);
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
+  }
+
+  .btn-game:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(233, 69, 96, 0.65);
+  }
+
+  .btn-game:active { transform: scale(0.97); }
+
+  .btn-game:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
   /* ===== Конфетти ===== */
   .confetti {
     position: fixed;
@@ -394,6 +657,10 @@
           <span class="icon">🎲</span>
           <span>Случайное поздравление<span class="sub">Жми — и получи тёплые слова</span></span>
         </button>
+        <button class="btn-menu" onclick="startGame()">
+          <span class="icon">🕯️</span>
+          <span>Зажги свечу на торте<span class="sub">Мини-игра: перетащи свечу</span></span>
+        </button>
       </div>
     </div>
 
@@ -416,27 +683,59 @@
       </div>
     </div>
 
+    <!-- Экран мини-игры -->
+    <div class="game-card" id="gameCard">
+      <div class="game-title">Зажги свечу на торте 🕯️</div>
+      <div class="game-hint" id="gameHint">Перетащи свечу на торт и зажги её</div>
+
+      <div class="game-field" id="gameField">
+        <!-- Торт -->
+        <div class="cake">
+          <div class="cake-top">
+            <div class="candle-slot" id="candleSlot"></div>
+          </div>
+          <div class="cake-layer top"></div>
+          <div class="cake-layer middle"></div>
+          <div class="cake-layer bottom"></div>
+        </div>
+
+        <!-- Свеча -->
+        <div class="candle" id="candle">
+          <div class="flame" id="flame"></div>
+          <div class="candle-wick"></div>
+          <div class="candle-body"></div>
+        </div>
+
+        <div class="drag-label" id="dragLabel">← перетащи свечу на торт</div>
+      </div>
+
+      <div class="game-buttons">
+        <button class="btn-game" id="btnLight" onclick="lightCandle()" disabled>Зажечь 🔥</button>
+        <button class="btn-back" onclick="backToMenu()">← Назад</button>
+      </div>
+    </div>
+
   </div>
 
 <script>
-  /* ===== Данные квеста ===== */
+  /* ===== Данные квеста (мужской род) ===== */
   const questData = [
     { emoji: "🔑", text: "Нажми, чтобы получить первый ключ к празднику..." },
     { emoji: "🌟", text: "Первый ключ — это улыбка. Улыбнись! Теперь второй ключ..." },
     { emoji: "💫", text: "Второй ключ — это тёплое слово. Скажи кому-нибудь доброе слово..." },
     { emoji: "🎈", text: "Третий ключ — это мечта. Вспомни свою самую заветную..." },
-    { emoji: "🎂", text: "Готово! Ты собрал(а) все ключи. Вот твоё поздравление: пусть всё, о чём ты мечтаешь, обязательно сбудется! ✨" }
+    { emoji: "🎂", text: "Готово! Ты собрал все ключи. Вот твоё поздравление: пусть всё, о чём ты мечтаешь, обязательно сбудется! ✨" }
   ];
 
-  /* ===== Данные случайных поздравлений ===== */
+  /* ===== Данные случайных поздравлений (мужской род) ===== */
   const randomGreetings = [
     { emoji: "🌟", text: "Пусть каждый день будет наполнен маленькими радостями, которые складываются в большое счастье." },
-    { emoji: "💛", text: "Желаю тебе людей рядом, которые ценят тебя таким(ой), какой(ая) ты есть — без масок и компромиссов." },
-    { emoji: "🚀", text: "Пусть этот год станет годом смелых решений и новых горизонтов. Ты способен(на) на большее, чем думаешь!" },
+    { emoji: "💛", text: "Желаю тебе людей рядом, которые ценят тебя таким, какой ты есть — без масок и компромиссов." },
+    { emoji: "🚀", text: "Пусть этот год станет годом смелых решений и новых горизонтов. Ты способен на большее, чем думаешь!" },
     { emoji: "🌿", text: "Здоровья тебе — не просто отсутствия болезней, а настоящей энергии, лёгкости и желания жить." },
     { emoji: "✨", text: "Пусть мечты сбываются не по расписанию, а внезапно — как приятный сюрприз посреди обычного дня." },
-    { emoji: "🎨", text: "Желаю вдохновения в том, что ты любишь, и смелости пробовать то, что ещё не пробовал(а)." },
-    { emoji: "🌊", text: "Пусть в жизни будет больше спокойных дней и меньше поводов для тревог. Ты этого достоин(на)." },
+    { emoji: "🎨", text: "Желаю вдохновения в том, что ты любишь, и смелости пробовать то, что ещё не пробовал." },
+    { emoji: "🌊", text: "Пусть в жизни будет больше спокойных дней и меньше поводов для тревог. Ты этого достоин." },
     { emoji: "🔥", text: "Пусть твой внутренний огонь не гаснет, а люди вокруг помогают ему разгораться ярче." },
     { emoji: "🍀", text: "Желаю удачи — той, которая приходит к тем, кто не боится делать шаг вперёд." },
     { emoji: "🌈", text: "Пусть после каждой трудности в твоей жизни появляется радуга — яркая, широкая и обязательно на всё небо." },
@@ -453,6 +752,7 @@
     document.getElementById('menuCard').classList.remove('show');
     document.getElementById('questCard').classList.remove('show');
     document.getElementById('randomCard').classList.remove('show');
+    document.getElementById('gameCard').classList.remove('show');
   }
 
   function openGift() {
@@ -499,7 +799,6 @@
       textEl.classList.remove('fade');
     }, 200);
 
-    // Кнопка
     const btn = document.getElementById('questBtn');
     if (questIndex === questData.length - 1) {
       btn.textContent = '🎉 Спасибо!';
@@ -509,7 +808,6 @@
       btn.onclick = nextQuestStep;
     }
 
-    // Точки прогресса
     const dots = document.querySelectorAll('#questDots .dot');
     dots.forEach((d, i) => {
       d.classList.toggle('active', i === questIndex);
@@ -557,6 +855,237 @@
     createConfetti(15);
   }
 
+  /* ===== Мини-игра «Свеча на торт» ===== */
+  let candlePlaced = false;
+  let candleLit = false;
+
+  function startGame() {
+    hideAll();
+    resetGame();
+    document.getElementById('gameCard').classList.add('show');
+  }
+
+  function resetGame() {
+    candlePlaced = false;
+    candleLit = false;
+
+    const candle = document.getElementById('candle');
+    const slot = document.getElementById('candleSlot');
+    const flame = document.getElementById('flame');
+    const btnLight = document.getElementById('btnLight');
+    const hint = document.getElementById('gameHint');
+    const dragLabel = document.getElementById('dragLabel');
+
+    // Возвращаем свечу в исходное положение
+    candle.style.left = '50%';
+    candle.style.bottom = '30px';
+    candle.style.top = 'auto';
+    candle.style.transform = 'translateX(-50%)';
+    candle.style.cursor = 'grab';
+    candle.style.pointerEvents = 'auto';
+
+    flame.classList.remove('on');
+    slot.classList.remove('filled');
+    btnLight.disabled = true;
+    btnLight.textContent = 'Зажечь 🔥';
+    hint.textContent = 'Перетащи свечу на торт и зажги её';
+    dragLabel.classList.remove('hide');
+  }
+
+  // Drag & drop (мышь + тач)
+  (function initGame() {
+    const field = document.getElementById('gameField');
+    const candle = document.getElementById('candle');
+    const slot = document.getElementById('candleSlot');
+    const flame = document.getElementById('flame');
+    const btnLight = document.getElementById('btnLight');
+    const hint = document.getElementById('gameHint');
+    const dragLabel = document.getElementById('dragLabel');
+
+    let dragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    function getPoint(e) {
+      if (e.touches && e.touches[0]) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+      return { x: e.clientX, y: e.clientY };
+    }
+
+    function startDrag(e) {
+      if (candlePlaced || candleLit) return;
+      e.preventDefault();
+      dragging = true;
+      candle.classList.add('dragging');
+      dragLabel.classList.add('hide');
+
+      const p = getPoint(e);
+      const rect = candle.getBoundingClientRect();
+      offsetX = p.x - (rect.left + rect.width / 2);
+      offsetY = p.y - rect.bottom;
+    }
+
+    function moveDrag(e) {
+      if (!dragging) return;
+      e.preventDefault();
+
+      const p = getPoint(e);
+      const fieldRect = field.getBoundingClientRect();
+
+      // Позиция свечи относительно поля
+      let x = p.x - fieldRect.left - offsetX;
+      let y = p.y - fieldRect.top - offsetY;
+
+      // Ограничиваем в пределах поля
+      const candleW = candle.offsetWidth;
+      const candleH = candle.offsetHeight;
+      x = Math.max(candleW / 2, Math.min(fieldRect.width - candleW / 2, x));
+      y = Math.max(candleH, Math.min(fieldRect.height, y + candleH));
+
+      candle.style.left = x + 'px';
+      candle.style.bottom = 'auto';
+      candle.style.top = (p.y - fieldRect.top - candleH + offsetY) + 'px';
+      candle.style.transform = 'translateX(-50%) scale(1.1) rotate(3deg)';
+
+      // Проверяем, над слотом ли свеча
+      const slotRect = slot.getBoundingClientRect();
+      const candleRect = candle.getBoundingClientRect();
+      const cx = candleRect.left + candleRect.width / 2;
+      const cy = candleRect.top + candleRect.height * 0.3; // верхняя часть свечи
+
+      const overSlot =
+        cx > slotRect.left - 15 &&
+        cx < slotRect.right + 15 &&
+        cy > slotRect.top - 20 &&
+        cy < slotRect.bottom + 20;
+
+      slot.classList.toggle('hover', overSlot);
+    }
+
+    function endDrag(e) {
+      if (!dragging) return;
+      dragging = false;
+      candle.classList.remove('dragging');
+
+      if (slot.classList.contains('hover')) {
+        placeCandle();
+      } else {
+        // Возвращаем свечу на место
+        candle.style.left = '50%';
+        candle.style.top = 'auto';
+        candle.style.bottom = '30px';
+        candle.style.transform = 'translateX(-50%)';
+        slot.classList.remove('hover');
+        dragLabel.classList.remove('hide');
+      }
+    }
+
+    function placeCandle() {
+      candlePlaced = true;
+      slot.classList.remove('hover');
+      slot.classList.add('filled');
+      dragLabel.classList.add('hide');
+
+      // Ставим свечу ровно в слот
+      const fieldRect = field.getBoundingClientRect();
+      const slotRect = slot.getBoundingClientRect();
+      const candleH = candle.offsetHeight;
+
+      const x = slotRect.left - fieldRect.left + slotRect.width / 2;
+      const y = slotRect.top - fieldRect.top - candleH + 22; // верх свечи в слоте
+
+      candle.style.left = x + 'px';
+      candle.style.top = y + 'px';
+      candle.style.bottom = 'auto';
+      candle.style.transform = 'translateX(-50%)';
+      candle.style.pointerEvents = 'none';
+
+      btnLight.disabled = false;
+      hint.textContent = 'Отлично! Теперь нажми «Зажечь» 🔥';
+    }
+
+    // Мышь
+    candle.addEventListener('mousedown', startDrag);
+    window.addEventListener('mousemove', moveDrag);
+    window.addEventListener('mouseup', endDrag);
+
+    // Тач
+    candle.addEventListener('touchstart', startDrag, { passive: false });
+    window.addEventListener('touchmove', moveDrag, { passive: false });
+    window.addEventListener('touchend', endDrag);
+
+    // Сохраняем ссылки для resetGame
+    window.__gameRefs = { candle, slot, flame, btnLight, hint, dragLabel, field };
+  })();
+
+  function lightCandle() {
+    if (!candlePlaced || candleLit) return;
+    candleLit = true;
+
+    const flame = document.getElementById('flame');
+    flame.classList.add('on');
+
+    const btn = document.getElementById('btnLight');
+    btn.disabled = true;
+    btn.textContent = 'Горит! 🔥✨';
+
+    document.getElementById('gameHint').textContent = 'С днём рождения! Загадывай желание ✨';
+
+    createConfetti(100);
+
+    // Через 2 секунды показываем поздравление поверх
+    setTimeout(() => {
+      showGameGreeting();
+    }, 1600);
+  }
+
+  function showGameGreeting() {
+    // Создаём оверлей с поздравлением
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position: fixed; inset: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; background: rgba(26, 26, 46, 0.85);
+      animation: fadeIn 0.5s ease;
+    `;
+    overlay.innerHTML = `
+      <div style="
+        background: #fff; border-radius: 28px; padding: 45px 35px;
+        max-width: 480px; width: 100%; text-align: center;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+        animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      ">
+        <div style="font-size: 60px; margin-bottom: 15px;">🎂</div>
+        <h2 style="
+          font-size: 26px; margin-bottom: 20px; line-height: 1.3;
+          background: linear-gradient(90deg, #e94560, #ff6b9d);
+          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        ">С Днём Рождения!</h2>
+        <p style="font-size: 17px; line-height: 1.7; color: #444; margin-bottom: 14px;">
+          Ты зажёг свечу — значит, желание уже в пути. ✨
+        </p>
+        <p style="font-size: 17px; line-height: 1.7; color: #444; margin-bottom: 25px;">
+          Пусть всё, что ты загадал, обязательно сбудется!
+        </p>
+        <button onclick="closeGameGreeting()" style="
+          background: linear-gradient(135deg, #e94560, #c23152); color: #fff;
+          border: none; padding: 14px 36px; font-size: 16px; font-weight: 600;
+          border-radius: 50px; cursor: pointer;
+          box-shadow: 0 8px 22px rgba(233, 69, 96, 0.45);
+        ">Спасибо! 🎉</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    createConfetti(60);
+  }
+
+  function closeGameGreeting() {
+    const overlay = document.querySelector('div[style*="rgba(26, 26, 46, 0.85)"]');
+    if (overlay) overlay.remove();
+    backToMenu();
+  }
+
   /* ===== Конфетти ===== */
   function createConfetti(count) {
     const colors = ['#e94560', '#ff6b9d', '#ffd93d', '#6bcb77', '#4d96ff', '#c77dff'];
@@ -573,6 +1102,17 @@
       setTimeout(() => piece.remove(), 6000);
     }
   }
+
+  /* ===== Анимации для оверлея ===== */
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8) translateY(30px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+  `;
+  document.head.appendChild(style);
 </script>
 
 </body>
